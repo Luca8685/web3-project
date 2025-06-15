@@ -22,4 +22,4 @@ sh deploy.sh
 
 前端使用 yarn 进行构建和启动
 yarn install
-
+yarn dev

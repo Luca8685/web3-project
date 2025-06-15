@@ -1,50 +1,56 @@
-import Link from 'next/link'
-import { useMemo } from 'react'
-import styles from './index.module.scss'
-import { Row, Col } from 'antd';
-import { useResponsive } from '@src/hooks/useResponsive';
+import Link from "next/link";
+import { useMemo } from "react";
+import styles from "./index.module.scss";
+import { Row, Col } from "antd";
+import { useResponsive } from "@src/hooks/useResponsive";
 
-import HomeBanner from '@src/containers/HomeBanner/HomeBanner';
-
+import HomeBanner from "@src/containers/HomeBanner/HomeBanner";
 
 export default function Index() {
-  const {
-    isDesktopOrLaptop,
-  } = useResponsive();
+  const { isDesktopOrLaptop } = useResponsive();
 
+  // 使用 useMemo 钩子记忆化计算 section 组件，只有当 isDesktopOrLaptop 变化时才重新计算
   const section = useMemo(() => {
-    return (<section className={[styles['sec-1'], styles['sec'], 'sec-1', styles['animated-1']].join(' ')}>
-      <div className={"background " + styles['background-1']}></div>
-      <div className="main-content">
-        <HomeBanner />
-        <Row>
-          <Col span={isDesktopOrLaptop ? 18 : 24}>
-            <h1 className="title">
-              C2N: Fundraising platform
-              <br />
-              on Sepolia
-            </h1>
-            <div className="desc">
-              C2N is the first exclusive launchpad for decentralized fundraising
-              <br />
-              offering the hottest and innovative projects in
-              <br />
-              a fair, secure, and efficient way.
-            </div>
-            <Link href="/stake" passHref>
-              <div className={styles['button'] + ' button'}>Stake</div>
-            </Link>
-          </Col>
-          <Col span={isDesktopOrLaptop ? 6 : 0}>
-            {
-              isDesktopOrLaptop
-                ? <div className={styles.banner}></div>
-                : <></>
-            }
-          </Col>
-        </Row>
-      </div>
-      <style lang="scss">{`
+    return (
+      <section
+        className={[
+          styles["sec-1"],
+          styles["sec"],
+          "sec-1",
+          styles["animated-1"],
+        ].join(" ")}
+      >
+        <div className={"background " + styles["background-1"]}></div>
+        <div className="main-content">
+          <HomeBanner />
+          <Row>
+            <Col span={isDesktopOrLaptop ? 18 : 24}>
+              <h1 className="title">
+                C2N: Fundraising platform
+                <br />
+                on Sepolia
+              </h1>
+              <div className="desc">
+                C2N is the first exclusive launchpad for decentralized
+                fundraising
+                <br />
+                offering the hottest and innovative projects in
+                <br />a fair, secure, and efficient way.
+              </div>
+              <Link href="/stake" passHref>
+                <div className={styles["button"] + " button"}>Stake</div>
+              </Link>
+            </Col>
+            <Col span={isDesktopOrLaptop ? 6 : 0}>
+              {isDesktopOrLaptop ? (
+                <div className={styles.banner}></div>
+              ) : (
+                <></>
+              )}
+            </Col>
+          </Row>
+        </div>
+        <style lang="scss">{`
         .sec-1 {
           position: relative;
           background-color: #000000;
@@ -100,12 +106,12 @@ export default function Index() {
           }
         }
       `}</style>
-    </section>
-    )
+      </section>
+    );
   }, [isDesktopOrLaptop]);
 
   return (
-    <main className={"container " + styles['container']}>
+    <main className={"container " + styles["container"]}>
       {section}
       <style lang="scss">{`
         @media (max-width: 767px) {
@@ -134,5 +140,5 @@ export default function Index() {
         }
       `}</style>
     </main>
-  )
+  );
 }

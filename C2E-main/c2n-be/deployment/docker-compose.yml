@@ -5,7 +5,7 @@ services:
     build: ../portal-api
     container_name: portal-api
     #image: registry.localdev:5002/bobabrewery/portal-api:0.0.1-launchpad
-    restart: always
+    restart: no
     ports:
       - 8080:8080
     env_file:
@@ -28,7 +28,7 @@ services:
     container_name: brewery-mysql
     image: library/mysql:5.7.29
     platform: linux/amd64
-    restart: always
+    restart: no
     volumes:
       - ./mysql/my.cnf:/etc/my.cnf
       - ./mysql/init:/docker-entrypoint-initdb.d/

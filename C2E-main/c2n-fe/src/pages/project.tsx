@@ -287,11 +287,13 @@ export default function Pool() {
     }
   }
 
+  // 刷新状态
   function refreshStates() {
     if (!saleContract || !walletAddress) {
       return;
     }
     let option = { gasLimit: 100000 };
+    // 检查是否已注册
     let promiseA = saleContract
       .isRegistered(walletAddress, option)
       .then((data) => {
@@ -300,6 +302,7 @@ export default function Pool() {
       .catch((e) => {
         console.error(e);
       });
+    // 检查是否已参与
     let promiseB = saleContract
       .isParticipated(walletAddress, option)
       .then((data) => {
@@ -311,6 +314,7 @@ export default function Pool() {
       .catch((e) => {
         console.error(e);
       });
+    // 等待两个检查都完成后，设置状态准备好
     Promise.all([promiseA, promiseB]).then(() => {
       setStatesReady(true);
     });
@@ -319,6 +323,7 @@ export default function Pool() {
   /**
    *
    * @returns Promise<string> - registration sign
+   * 获取注册签名
    */
   function getRegistrationSign() {
     console.log("getRegis-------");
@@ -342,6 +347,7 @@ export default function Pool() {
   /**
    *
    * @returns Promise<string> - participate sign
+   *  获取参与签名
    */
   function getParticipateSign() {
     const NUMBER_1E18 = "1000000000000000000";
@@ -367,6 +373,8 @@ export default function Pool() {
   /**
    * Register
    * @returns Promise
+   *
+   * 注册项目
    */
   function registerForSale() {
     if (!saleContract) {
@@ -395,14 +403,18 @@ export default function Pool() {
   /**
    * Participate project
    * @returns Promise
+   * 参与项目
    */
   async function participate(value) {
     console.log(value, "val ---------------");
     if (!saleContract) {
       return Promise.reject();
     }
+    // 设置加载状态
     setLoading(true);
+    // 获取质押代币的小数位数
     const decimals = await depositTokenContract.decimals();
+    // 计算支付金额
     const paymentAmount = BigNumber.from(projectInfo.tokenPriceInPT)
       .mul(~~value.value)
       .div(Math.pow(10, 18 - decimals));
@@ -410,6 +422,7 @@ export default function Pool() {
      * 购买代币
      * 设置足够的代币授权，后面在withdraw时，会自动扣除相应的代币
      */
+    // 批准代币授权
     return approve(
       saleAddress,
       Number(ethers.utils.formatUnits(paymentAmount, depositDecimals)),
@@ -432,7 +445,7 @@ export default function Pool() {
           },
           "params---------"
         );
-
+        // 调用合约的 participate 方法参与项目
         return saleContract
           .participate(signBuffer, BigNumber.from(allocationTop + ""), options)
           .then((transaction) => {
@@ -456,6 +469,7 @@ export default function Pool() {
       });
   }
 
+  // 提取代币
   function withdrawTokens() {
     if (!saleContract) {
       return Promise.reject();
@@ -481,6 +495,7 @@ export default function Pool() {
       });
   }
 
+  // 获取参与信息
   function getParticipateInfo() {
     if (!saleContract) {
       return Promise.reject;
@@ -498,6 +513,8 @@ export default function Pool() {
         console.error(e);
       });
   }
+
+  // 销售信息组件
   const SaleInfo = (
     <div className={styles["sale-info"] || ""}>
       <Row className={styles["row"]}>
@@ -549,6 +566,7 @@ export default function Pool() {
       </Row>
     </div>
   );
+  // 代币信息组件
   const TokenInfo = (
     <div className={styles["token-info"] || ""}>
       <Row className={styles["row"]}>

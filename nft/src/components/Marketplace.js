@@ -32,6 +32,7 @@ export default function Marketplace() {
         console.log("getting this tokenUri", tokenURI);
         tokenURI = GetIpfsUrlFromPinata(tokenURI);
         let meta = await axios.get(tokenURI);
+        //  console.log("meta:", meta);
         meta = meta.data;
 
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
@@ -51,6 +52,7 @@ export default function Marketplace() {
     updateFetched(true);
     updateData(items);
   }
+
   if (!dataFetched) getAllNFTs();
 
   return (

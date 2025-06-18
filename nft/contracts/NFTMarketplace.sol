@@ -30,7 +30,7 @@ contract NFTMarketplace is Ownable, ERC721URIStorage {
         bool currentlyListed
     );
 
-    constructor() Ownable(msg.sender) ERC721("NFTMarketplace", "NFTM") {}
+    constructor() Ownable() ERC721("NFTMarketplace", "NFTM") {}
 
     //owner
 

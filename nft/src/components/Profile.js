@@ -57,6 +57,7 @@ export default function Profile () {
 
     const params = useParams();
     const tokenId = params.tokenId;
+    console.log("tokenId:",tokenId);
     if(!dataFetched)
         getNFTData(tokenId);
 

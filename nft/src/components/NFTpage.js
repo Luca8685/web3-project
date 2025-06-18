@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
 import { useState } from "react";
+import { useLocation } from "react-router";
 import { GetIpfsUrlFromPinata } from "../utils";
 
 export default function NFTPage(props) {
@@ -11,6 +12,8 @@ export default function NFTPage(props) {
     const [dataFetched, updateDataFetched] = useState(false);
     const [message, updateMessage] = useState("");
     const [currAddress, updateCurrAddress] = useState("0x");
+
+     const location = useLocation();
 
     async function getNFTData(tokenId) {
         const ethers = require("ethers");
@@ -26,7 +29,7 @@ export default function NFTPage(props) {
         tokenURI = GetIpfsUrlFromPinata(tokenURI);
         let meta = await axios.get(tokenURI);
         meta = meta.data;
-        console.log(listedToken);
+        console.log("listedToken===>",listedToken);
 
         let item = {
             price: meta.price,
@@ -37,7 +40,7 @@ export default function NFTPage(props) {
             name: meta.name,
             description: meta.description,
         }
-        console.log(item);
+        console.log("item===>",item);
         updateData(item);
         updateDataFetched(true);
         console.log("address", addr)
@@ -53,7 +56,10 @@ export default function NFTPage(props) {
 
             //Pull the deployed contract instance
             let contract = new ethers.Contract(MarketplaceJSON.address, MarketplaceJSON.abi, signer);
+            console.log(data.price);
             const salePrice = ethers.utils.parseUnits(data.price, 'ether')
+            console.log(salePrice);
+            console.log(salePrice.toString());
             updateMessage("Buying the NFT... Please Wait (Upto 5 mins)")
             //run the executeSale function
             let transaction = await contract.executeSale(tokenId, { value: salePrice });
@@ -61,6 +67,7 @@ export default function NFTPage(props) {
 
             alert('You successfully bought the NFT!');
             updateMessage("");
+            window.location.replace(location.pathname);
         }
         catch (e) {
             alert("Upload Error" + e)

@@ -9,6 +9,7 @@ function NFTTile(data) {
         pathname: "/nftPage/" + data.data.tokenId
     }
 
+    // console.log("=======>",data.data.image);
     const IPFSUrl = GetIpfsUrlFromPinata(data.data.image);
 
     return (
